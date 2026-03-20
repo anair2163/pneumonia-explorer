@@ -1,0 +1,20 @@
+[
+  {
+    "epoch": 1,
+    "experiment": "baseline",
+    "train_loss": 0.115065,
+    "train_accuracy": 0.956209,
+    "val_loss": 0.047833,
+    "val_accuracy": 0.985623
+  },
+  {
+    "epoch": "test",
+    "experiment": "baseline",
+    "train_loss": null,
+    "train_accuracy": null,
+    "val_loss": null,
+    "val_accuracy": null,
+    "test_loss": 0.694129,
+    "test_accuracy": 0.834936
+  }
+]

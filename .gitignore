@@ -1,0 +1,8 @@
+data/raw/
+__pycache__/
+.DS_Store
+.streamlit/
+.ipynb_checkpoints/
+models/*.pt
+models/*.pth
+models/*.joblib

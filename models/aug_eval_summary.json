@@ -1,0 +1,30 @@
+{
+  "experiment_name": "augmented",
+  "status": "evaluated",
+  "model_path": "models/aug_model.pt",
+  "predictions_path": "models/aug_predictions.csv",
+  "sample_predictions_path": "models/aug_sample_predictions.csv",
+  "roc_curve_path": "models/aug_roc_curve.csv",
+  "num_test_images": 624,
+  "accuracy": 0.831731,
+  "precision": 0.790224,
+  "recall": 0.994872,
+  "f1": 0.880817,
+  "roc_auc": 0.958114,
+  "confusion_matrix": {
+    "labels": [
+      "NORMAL",
+      "PNEUMONIA"
+    ],
+    "values": [
+      [
+        131,
+        103
+      ],
+      [
+        2,
+        388
+      ]
+    ]
+  }
+}

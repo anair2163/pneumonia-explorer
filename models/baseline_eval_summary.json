@@ -1,0 +1,30 @@
+{
+  "experiment_name": "baseline",
+  "status": "evaluated",
+  "model_path": "models/baseline_model.pt",
+  "predictions_path": "models/baseline_predictions.csv",
+  "sample_predictions_path": "models/baseline_sample_predictions.csv",
+  "roc_curve_path": "models/baseline_roc_curve.csv",
+  "num_test_images": 624,
+  "accuracy": 0.834936,
+  "precision": 0.792261,
+  "recall": 0.997436,
+  "f1": 0.883087,
+  "roc_auc": 0.96648,
+  "confusion_matrix": {
+    "labels": [
+      "NORMAL",
+      "PNEUMONIA"
+    ],
+    "values": [
+      [
+        132,
+        102
+      ],
+      [
+        1,
+        389
+      ]
+    ]
+  }
+}
