@@ -36,7 +36,7 @@ render_sidebar()
 
 render_page_header(
     eyebrow="Project Focus",
-    title="Pneumonia Detection & Synthetic Augmentation Explorer",
+    title="Chest X-Ray Classification and Augmentation Explorer",
     description=(
         "Built by Ahan Nair, this project explores how computer vision models detect pneumonia from chest X-rays, "
         "how prediction behavior changes across thresholds and evaluation metrics, and how augmentation can affect performance."

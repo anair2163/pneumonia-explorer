@@ -71,7 +71,7 @@ setup_page()
 render_sidebar()
 
 render_page_header(
-    eyebrow="Synthetic Augmentation",
+    eyebrow="Image Augmentation",
     title="Comparing the baseline model with an augmentation experiment",
     description=(
         "This section compares a baseline training setup with a stronger augmentation-based training configuration. "

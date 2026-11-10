@@ -3,7 +3,7 @@ from __future__ import annotations
 
 TEXT_BLOCKS = {
     "project_overview": (
-        "Pneumonia Detection & Synthetic Augmentation Explorer is an educational machine learning project "
+        "Chest X-Ray Classification and Augmentation Explorer is an educational machine learning project "
         "that presents a medical imaging workflow from problem framing through evaluation, with a clear "
         "focus on interpretation as well as model development."
     ),
