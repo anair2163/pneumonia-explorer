@@ -24,19 +24,6 @@ def load_summary(experiment_name: str) -> dict | None:
     return json.loads(summary_path.read_text())
 
 
-def load_baseline_artifacts() -> tuple[dict | None, pd.DataFrame | None]:
-    baseline_entry = MODEL_REGISTRY["baseline"]
-    summary_path = Path(baseline_entry["summary_path"])
-    predictions_path = Path(baseline_entry["predictions_path"])
-
-    if not summary_path.exists():
-        return None, None
-
-    summary = json.loads(summary_path.read_text())
-    predictions = pd.read_csv(predictions_path) if predictions_path.exists() else None
-    return summary, predictions
-
-
 def format_metric(value) -> str:
     if value is None or pd.isna(value):
         return "N/A"
@@ -45,7 +32,6 @@ def format_metric(value) -> str:
 
 def build_dynamic_findings(
     baseline_summary: dict,
-    baseline_predictions: pd.DataFrame | None,
     augmented_summary: dict | None,
 ) -> tuple[list[str], list[str], list[str]]:
     recall_value = format_metric(baseline_summary.get("recall"))
@@ -62,22 +48,27 @@ def build_dynamic_findings(
     aug_roc_auc = format_metric(augmented_summary.get("roc_auc")) if augmented_summary is not None else "N/A"
 
     findings = [
-        f"The baseline model achieved very high recall ({recall_value}) and strong ROC-AUC ({roc_auc_value}), while also reaching accuracy of {accuracy_value} and F1 of {f1_value} on the untouched test split.",
-        f"The current models behave like screening-oriented classifiers: they miss very few pneumonia cases ({false_negatives} false negative for the baseline) but accept many false positives ({false_positives} Normal scans flagged as Pneumonia).",
-        f"The baseline slightly outperformed the augmented model in this experiment, with stronger accuracy ({accuracy_value} vs {aug_accuracy}), F1 ({f1_value} vs {aug_f1}), and ROC-AUC ({roc_auc_value} vs {aug_roc_auc}).",
-        "Synthetic augmentation did not improve results in the current configuration, so it should be treated as a comparison result rather than as a gain.",
+        f"The baseline achieved recall of {recall_value}, ROC-AUC of {roc_auc_value}, accuracy of {accuracy_value}, and F1 of {f1_value} on the supplied test split.",
     ]
-
+    if false_positives is not None and false_negatives is not None:
+        normal_images = sum(confusion_values[0])
+        pneumonia_images = sum(confusion_values[1])
+        findings.append(
+            f"At the saved decision rule, the baseline flagged {false_positives} of {normal_images} normal images "
+            f"and missed {false_negatives} of {pneumonia_images} pneumonia images."
+        )
+    if augmented_summary is not None:
+        findings.append(
+            f"Baseline and stronger-augmentation results were {accuracy_value} and {aug_accuracy} for accuracy, "
+            f"{f1_value} and {aug_f1} for F1, and {roc_auc_value} and {aug_roc_auc} for ROC-AUC."
+        )
     takeaways = [
-        "This kind of model may be more useful for triage or screening support than for final diagnosis, because it is tuned toward sensitivity rather than selectivity.",
-        "Threshold choice matters because the operating point changes the balance between catching more pneumonia cases and reducing false positives.",
-        "Augmentation strategies should be validated empirically rather than assumed to help, especially when the baseline is already strong.",
+        "Review recall alongside false positives. Changing the threshold shifts the balance between the two errors.",
+        "The comparison describes these two runs on one test split. Repeated seeds and a separate dataset would help assess stability.",
     ]
-
     limitations = [
-        "The results are limited by dataset scope, class balance, and the representativeness of the available train and test splits.",
-        "Medical imaging predictions shown in this app are not medical advice and should not be treated as diagnostic output.",
-        "One training setup is not enough to fully judge augmentation effectiveness, so broader tuning and validation would still be needed.",
+        "The supplied split represents one pediatric image dataset. External validation and patient-level separation were not established by this project.",
+        "The displayed model scores are uncalibrated. The app is for educational use.",
     ]
 
     return findings, takeaways, limitations
@@ -114,7 +105,7 @@ render_sidebar()
 
 render_page_header(
     eyebrow="Key Findings",
-    title="Executive summary of the project and what it demonstrates",
+    title="What the test split shows",
     description=(
         "This project combines exploratory analytics, image classification, and model comparison to better understand how pneumonia detection systems behave on a public chest X-ray dataset. "
         "The focus is on interpretation, tradeoffs, and responsible presentation rather than clinical deployment claims."
@@ -122,13 +113,12 @@ render_page_header(
     chips=["Executive summary", "Model tradeoffs", "Educational use only", "Next steps"],
 )
 
-baseline_summary, baseline_predictions = load_baseline_artifacts()
+baseline_summary = load_summary("baseline")
 augmented_summary = load_summary("augmented")
 
 if baseline_summary is not None:
     findings, takeaways, limitations = build_dynamic_findings(
         baseline_summary,
-        baseline_predictions,
         augmented_summary,
     )
 

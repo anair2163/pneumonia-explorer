@@ -3,7 +3,7 @@ from __future__ import annotations
 import streamlit as st
 
 
-APP_TITLE = "Pneumonia Detection & Synthetic Augmentation Explorer"
+APP_TITLE = "Chest X-Ray Classification and Augmentation Explorer"
 APP_ICON = "🫁"
 GITHUB_URL = "https://github.com/anair2163"
 LINKEDIN_URL = "https://www.linkedin.com/in/ahannair"
@@ -25,7 +25,7 @@ def render_sidebar() -> None:
             """
             <div class="sidebar-identity">
                 <div class='sidebar-brand'>Pneumonia Detection</div>
-                <div class='sidebar-subtitle'>Synthetic Augmentation Explorer</div>
+                <div class='sidebar-subtitle'>Image Augmentation Explorer</div>
                 <div class="sidebar-copy">
                     Built by Ahan Nair
                     <br><br>
@@ -51,7 +51,7 @@ def render_sidebar() -> None:
         st.page_link("pages/3_Analytics_Exploration.py", label="Analytics Exploration", icon="📊")
         st.page_link("pages/4_Prediction_Lab.py", label="Prediction Lab", icon="🧪")
         st.page_link("pages/5_Model_Performance.py", label="Model Performance", icon="📈")
-        st.page_link("pages/6_Synthetic_Augmentation.py", label="Synthetic Augmentation", icon="🧬")
+        st.page_link("pages/6_Synthetic_Augmentation.py", label="Image Augmentation", icon="🧬")
         st.page_link("pages/7_Key_Findings.py", label="Key Findings", icon="✅")
         st.page_link("pages/8_Real_World_Context.py", label="Real-World Context", icon="🌍")
         st.markdown("<div class='sidebar-note-label'>Reading order</div>", unsafe_allow_html=True)

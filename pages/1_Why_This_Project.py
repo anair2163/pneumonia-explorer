@@ -21,7 +21,7 @@ render_sidebar()
 
 render_page_header(
     eyebrow="Why This Project",
-    title="Pneumonia Detection & Synthetic Augmentation Explorer",
+    title="Chest X-Ray Classification and Augmentation Explorer",
     description=(
         "This project explores how chest X-ray classification, model evaluation, and augmentation experiments can be studied together in a practical medical imaging workflow."
     ),
@@ -60,10 +60,10 @@ with overview_right:
 st.markdown("<div class='section-spacer'></div>", unsafe_allow_html=True)
 
 render_surface_card(
-    eyebrow="Why Synthetic Augmentation Is Worth Studying",
+    eyebrow="Why Compare Augmentation Settings",
     title="Better coverage can be as important as better architecture",
     body=(
-        "Synthetic augmentation is worth studying because medical datasets are often limited, imbalanced, or "
+        "Training-time augmentation is worth studying because medical datasets are often limited, imbalanced, or "
         "narrow in visual diversity. Exploring synthetic examples creates a structured way to ask whether broader "
         "training coverage can improve robustness without introducing misleading shortcuts or unrealistic artifacts."
     ),
@@ -99,7 +99,7 @@ with feature_col4:
     render_surface_card(
         eyebrow="Evaluation",
         title="Model and augmentation story",
-        body="Focused sections for performance comparison, synthetic augmentation strategy, and final takeaways grounded in the saved model results.",
+        body="Focused sections for performance comparison, image augmentation strategy, and final takeaways grounded in the saved model results.",
     )
 
 st.markdown("<div class='section-spacer'></div>", unsafe_allow_html=True)
@@ -115,7 +115,7 @@ with nav_col2:
     safe_page_link("pages/4_Prediction_Lab.py", label="Prediction Lab", icon="🧪")
     safe_page_link("pages/5_Model_Performance.py", label="Model Performance", icon="📈")
 with nav_col3:
-    safe_page_link("pages/6_Synthetic_Augmentation.py", label="Synthetic Augmentation", icon="🧬")
+    safe_page_link("pages/6_Synthetic_Augmentation.py", label="Image Augmentation", icon="🧬")
     safe_page_link("pages/7_Key_Findings.py", label="Key Findings", icon="✅")
 
 st.markdown("<div class='section-spacer'></div>", unsafe_allow_html=True)

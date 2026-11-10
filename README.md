@@ -1,89 +1,39 @@
-# Pneumonia Detection & Synthetic Augmentation Explorer
+# Chest X-Ray Classification and Augmentation Explorer
 
-A polished Streamlit multipage app for presenting a pneumonia detection case study, comparing a baseline transfer-learning model with an augmentation experiment, and communicating the results in a recruiter-friendly format.
+A Streamlit app comparing two ResNet-18 transfer-learning runs on a public pediatric chest X-ray dataset. The app presents class balance, threshold behavior, confusion matrices and a side-by-side training augmentation experiment.
 
-## First Run Checklist
+[Evaluation metrics](models/evaluation_comparison.csv) · [Source dataset](https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia)
 
-- Install project dependencies with `pip install -r requirements.txt`
-- Confirm the environment includes `streamlit`, `torch`, `torchvision`, and `kagglehub`
-- Configure Kaggle or KaggleHub access on your machine
-- Download the dataset into `data/raw/`
-- Train a first baseline model, run evaluation, then launch the app
+## Results on the supplied 624-image test split
 
-## Setup
+| Run | ROC-AUC | F1 | Pneumonia recall | Normal specificity |
+| --- | ---: | ---: | ---: | ---: |
+| Baseline | 0.966 | 0.883 | 99.7% | 56.4% |
+| Stronger augmentation | 0.958 | 0.881 | 99.5% | 56.0% |
+
+The baseline classified 389 of 390 pneumonia images correctly and flagged 102 of 234 normal images as pneumonia. That tradeoff is more informative than recall alone. The stronger augmentation run scored slightly lower on the saved metrics. Each experiment ran for one epoch with one seed, so the difference is descriptive. The comparison uses image transformations and the same supplied test split for both runs.
+
+This is a dataset-specific educational evaluation. The repository does not establish external, patient-grouped or clinical validation. Displayed model scores are uncalibrated.
+
+## Run locally
+
+Inspect the saved evaluation results through the app:
 
 ```bash
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
+streamlit run app.py
 ```
 
-The local app and ML scripts require `streamlit`, `torch`, `torchvision`, and `kagglehub`. Configure Kaggle or KaggleHub access on your machine before downloading data. The project uses the Kaggle dataset `paultimothymooney/chest-xray-pneumonia` and does not require the Kaggle CLI.
-
-## Local Run Order
-
-Run the project in this order:
+To regenerate the results and enable live inference, configure KaggleHub access and run from the repository root:
 
 ```bash
-pip install -r requirements.txt
 python scripts/download_data.py
-python src/train.py --epochs 1
+python src/train.py --experiment baseline --epochs 1 --seed 42
+python src/train.py --experiment augmented --epochs 1 --seed 42
 python src/evaluate.py
 streamlit run app.py
 ```
 
-## Download the Dataset
+Training writes local checkpoints under `models/`. The repository includes evaluation summaries and prediction tables. Raw images and checkpoints are provisioned locally.
 
-```bash
-python scripts/download_data.py
-```
-
-The raw dataset is downloaded into `data/raw/` and is excluded from git. Do not commit raw data to the repository.
-
-## Train Models
-
-Train the baseline model:
-
-```bash
-python src/train.py --experiment baseline
-```
-
-Train the augmentation experiment:
-
-```bash
-python src/train.py --experiment augmented
-```
-
-Model checkpoints and training history are saved under `models/`.
-
-## Run Evaluation
-
-```bash
-python src/evaluate.py
-```
-
-This writes model summaries, per-image predictions, ROC data, and comparison files to `models/` so the Streamlit pages can read them directly.
-
-## Launch the App
-
-```bash
-streamlit run app.py
-```
-
-The app is designed to run from the project root with relative, deployment-friendly paths.
-
-## Deployment Notes
-
-- Keep the repository root as the Streamlit working directory.
-- Ensure `data/raw/` and any required model artifacts are present in the deployment environment.
-- Update the GitHub and LinkedIn placeholder links before publishing.
-- Large raw data files should be provisioned separately and not stored in Git.
-
-## Structure
-
-- `app.py` contains the home page and shared visual shell
-- `pages/` contains the Streamlit multipage views
-- `src/` holds reusable helpers for data loading, charts, inference, evaluation, and narrative content
-- `scripts/download_data.py` downloads and syncs the Kaggle dataset into a consistent local `data/raw/` folder using `kagglehub`
-- `models/` is reserved for trained checkpoints or serialized artifacts
-- `assets/sample_images/` is a home for demo X-rays and screenshots
-- `data/raw/` is the expected local location for raw Kaggle data
-- `data/README.md` documents data sourcing and handling notes
+Data source: Kermany, Goldbaum, Cai et al., [Identifying Medical Diagnoses and Treatable Diseases by Image-Based Deep Learning](https://doi.org/10.1016/j.cell.2018.02.010), *Cell*, 2018.
